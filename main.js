@@ -86,8 +86,8 @@ function updateText(responseText) {
         $("#infotxt").scrollTop(document.getElementById("infotxt").scrollHeight);}
     else if (document.getElementById("infotxt") && responseText ===""){
         var screenTxt = document.getElementById("infotxt");
-        screenTxt.innerHTML = "bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯";
-        infoflushd = false
+        screenTxt.innerHTML = "~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯";
+        infoflushd = false;
     }
 }
 function setmsg(anime, myep, mymessage){
@@ -147,6 +147,7 @@ function setmsg(anime, myep, mymessage){
             updateText("");
         }
         else{
+            updateText("已停止发送...");
             updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
             console.log("脚本已关闭...");
         }
