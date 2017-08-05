@@ -17,6 +17,8 @@
 var bilibilisendstop = true;
 var stopbutton = false;
 var infoflushd = true;
+var snewanime  = bangumiModule.seasonId;
+var snewep  = bangumiModule.newestEp;
 (function() {
     'use strict';
     console.log("bilibili- ( ゜- ゜)つロ 乾杯~");
@@ -51,6 +53,8 @@ var infoflushd = true;
     bidiv[0].appendChild(div);
 
     $('.button').click(function () {
+        document.getElementById("anime").value = snewanime;
+        document.getElementById("ep").value = snewep;
         $('#modal').css('display', 'block');
         $('.modal-bg').fadeIn();
     });
@@ -90,11 +94,14 @@ function updateText(responseText) {
     }
 }
 function setmsg(anime, myep, mymessage){
-    if (myep === null){
-        myep = 1;}
+    if (myep === null||myep===""||anime === null||anime===""){
+        return alert("EP或者番剧ID不能为空");}
+    if (mymessage === null||mymessage===""){
+        mymessage = "bilibili- ( ゜- ゜)つロ 乾杯~";}
     var intmyep = parseInt(myep);
-    if(intmyep<1||intmyep > 10000){
-        intmyep = parseInt("1");}
+    var intanime = parseInt(anime);
+    if(intmyep<1||intmyep > 10000||intanime<10||intanime > 999999){
+        return alert("EP或者番剧ID值不正确");}
     function sendMessage(aid, message){
         $.ajax({
             url: 'https://api.bilibili.com/x/v2/reply/add',
