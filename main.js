@@ -151,7 +151,7 @@ function setmsg(anime, myep, mymessage){
             updateText("已找到输入的EP:"+myep+",AV:"+id+"\n正在准备发送...");
             document.getElementById("msgbutton").value = "发送";
             console.log(newresult);
-            //sendMessage(id, mymessage);
+            sendMessage(id, mymessage);
         }
         else if (bilibilisendstop === false) {
             setTimeout(setmsg, 1, anime, myep, mymessage);
