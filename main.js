@@ -29,7 +29,7 @@ var infoflushd = true;
         'button:hover{background-color: #d47091;border-color: #d47091;}'+
         '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}'+
         '#forgot-link:hover{color: #23AA84;}'+
-        '#modal{ position:absolute;background-color:#F5F5F6;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}'+
+        '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}'+
         '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}'+
         '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}'+
         '#close:hover{color: #000;}');
@@ -40,11 +40,11 @@ var infoflushd = true;
         '<div id="modal" style="display: none;position: relative;">'+
         '<span>发送评论<a href="#close" id="close">×</a></span>'+
         '<form>'+
-        '<input id="anime" style="position: absolute;left: 12px;top: 44px;height: 20px;width: 150px;" onkeyup="value=value.replace(/[^\\d]/g,\'\')" onbeforepaste="clipboardData.setData(\'\'text\'\',clipboardData.getData(\'\'text\'\').replace(/[^\\d]/g,\'\'))" name="anime" type="text" placeholder="番剧ID" >'+
-        '<input id="ep" style="position: absolute;left: 174px;top: 43px;height: 20px;width: 150px;" onkeyup="value=value.replace(/[^\\d]/g,\'\') "onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\\d]/g,\'\'))" name="ep" type="text" placeholder="P数" >'+
-        '<textarea id="msg" name="msg" type="text" placeholder="评论内容" style="position: absolute;top: 75px;left: 12px;width: 280px;height: 60px;"></textarea>'+
-        '<textarea id="infotxt" readonly="readonly" style="bottom: 7px;position: absolute;width: 308px;left: 12px;height: 100px;">~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯</textarea>'+
-        '<input name="submit" id="msgbutton" type="button" value="发送" style="position: absolute;top: 75px;left: 301px;height: 66px;width: 25px;"></input>'+
+        '<input id="anime" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 12px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\')" onbeforepaste="clipboardData.setData(\'\'text\'\',clipboardData.getData(\'\'text\'\').replace(/[^\\d]/g,\'\'))" name="anime" type="text" placeholder="番剧ID" >'+
+        '<input id="ep" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 150px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\') "onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\\d]/g,\'\'))" name="ep" type="text" placeholder="P数" >'+
+        '<textarea id="msg" name="msg" type="text" placeholder="评论内容" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;top: 45px;left: 12px;width: 308px;height: 60px;"></textarea>'+
+        '<textarea id="infotxt" readonly="readonly" style="background-color: rgba(190, 190, 190, 0.7);bottom: 7px;position: absolute;width: 308px;left: 12px;height: 100px;">~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯</textarea>'+
+        '<input name="submit" id="msgbutton" type="button" value="发送" style="position: absolute;top: 117px;left: 288px;height: 24px;width: 38px;"></input>'+
         '</form>'+
         '</div>'+
         '</div>';
@@ -90,6 +90,11 @@ function updateText(responseText) {
     }
 }
 function setmsg(anime, myep, mymessage){
+    if (myep === null){
+        myep = 1;}
+    var intmyep = parseInt(myep);
+    if(intmyep<1||intmyep > 10000){
+        intmyep = parseInt("1");}
     function sendMessage(aid, message){
         $.ajax({
             url: 'https://api.bilibili.com/x/v2/reply/add',
@@ -117,12 +122,10 @@ function setmsg(anime, myep, mymessage){
     }
     $.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id="+anime,function(newresult) {
         //api服务器默认请求头带no-cache,如果发生特殊情况,在.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id="+anime后加上+"&_="+(new Date()).getTime()用时间戳刷掉缓存
-
         var eps = newresult.result;
         var i = eps.length - 1;
         var c = myep - 1;
         var ep =  parseInt(eps[i].index);
-        var intmyep = parseInt(myep);
         console.log("当前最新EP:"+ep);
         updateText("当前最新EP:"+ep);
         /*
