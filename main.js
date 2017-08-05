@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Setbilibilimsg
 // @namespace    http://tampermonkey.net/
-// @version      3.2.1
+// @version      5.2.1
 // @description  bilibili- ( ゜- ゜)つロ 乾杯~
 // @author       LJea
 // @homepage     http://www.lioat.cn/
@@ -61,6 +61,7 @@ var snewep  = bangumiModule.newestEp;
     $('#close').click(function () {
         bilibilisendstop = true;
         infoflushd = true;
+        document.getElementById("msgbutton").value = "发送";
         $('.modal-bg').fadeOut();
         $('#modal').fadeOut();
         updateText("");
@@ -75,10 +76,12 @@ var snewep  = bangumiModule.newestEp;
             bilibilisendstop = false;
             stopbutton = true;
             infoflushd = false;
+            document.getElementById("msgbutton").value = "停止";
             setmsg(anime, myep, mymessage);}
         else{
             bilibilisendstop = true;
             stopbutton = false;
+            document.getElementById("msgbutton").value = "发送";
         }
     });
 })();
@@ -95,12 +98,14 @@ function updateText(responseText) {
 }
 function setmsg(anime, myep, mymessage){
     if (myep === null||myep===""||anime === null||anime===""){
+        document.getElementById("msgbutton").value = "发送";
         return alert("EP或者番剧ID不能为空");}
     if (mymessage === null||mymessage===""){
         mymessage = "bilibili- ( ゜- ゜)つロ 乾杯~";}
     var intmyep = parseInt(myep);
     var intanime = parseInt(anime);
     if(intmyep<1||intmyep > 10000||intanime<10||intanime > 999999){
+        document.getElementById("msgbutton").value = "发送";
         return alert("EP或者番剧ID值不正确");}
     function sendMessage(aid, message){
         $.ajax({
@@ -144,6 +149,7 @@ function setmsg(anime, myep, mymessage){
             var id = eps[c].avid;
             console.log("已找到输入的EP:"+myep+",AV:"+id+"\n正在准备发送...");
             updateText("已找到输入的EP:"+myep+",AV:"+id+"\n正在准备发送...");
+            document.getElementById("msgbutton").value = "发送";
             console.log(newresult);
             //sendMessage(id, mymessage);
         }
