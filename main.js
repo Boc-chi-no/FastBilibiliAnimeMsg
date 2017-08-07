@@ -4258,7 +4258,27 @@ var stopbutton = false;
 var infoflushd = true;
 var snewanime = bangumiModule.seasonId;
 var snewep = bangumiModule.newestEp;
-(function() {
+var allcookies = document.cookie;
+function getCookie(cookie_name) {
+    var allcookies = document.cookie;
+    var cookie_pos = allcookies.indexOf(cookie_name); //索引的长度
+    // 如果找到了索引，就代表cookie存在，
+    // 反之，就说明不存在。
+    if (cookie_pos != -1) {
+        // 把cookie_pos放在值的开始，只要给值加1即可。
+        cookie_pos += cookie_name.length + 1; //这里容易出问题，所以请大家参考的时候自己好好研究一下
+        var cookie_end = allcookies.indexOf(";", cookie_pos);
+
+        if (cookie_end == -1) {
+            cookie_end = allcookies.length;
+        }
+
+        var value = unescape(allcookies.substring(cookie_pos, cookie_end)); //这里就可以得到你想要的cookie的值了。。。
+    }
+    return value;
+}
+var acsrf = getCookie("bili_jct");
+console.log("已获取CSRF(请求令牌):", acsrf); (function() {
     'use strict';
     console.log("bilibili- ( ゜- ゜)つロ 乾杯~");
     GM_addStyle('.modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:888;background-color:rgba(50,50,50,0.5);}' + '.button{position:relative;font-size:17px;background:#d95280;border-radius: 3px;border-bottom: 3px solid #B5002A;padding:7px 15px;color:#fff;cursor:pointer;float:right;margin:50px 70px;-webkit-transition:margin 100ms;-moz-transition:margin 100ms;transition:margin 100ms ;}' + '.button:active{margin: 53px 70px;}' + '.button:hover{background:#ec7ba0;}' + 'button{float: right;padding: 8px 12px;margin-top: 15px;background: #dc5481;border: none;color: #fff;border-bottom: 3px solid #c54d74;border-radius: 3px;cursor: pointer;}' + 'button:active{margin: 18px 10px;}' + 'button:hover{background-color: #d47091;border-color: #d47091;}' + '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}' + '#forgot-link:hover{color: #23AA84;}' + '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}' + '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}' + '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}' + '#close:hover{color: #000;}');
@@ -4337,6 +4357,7 @@ function setmsg(anime, myep, mymessage) {
                 message: message,
                 plat: 1,
                 jsonp: 'jsonp',
+                csrf: acsrf
             },
             xhrFields: {
                 withCredentials: true
