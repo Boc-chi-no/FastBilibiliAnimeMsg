@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Setbilibilimsg
 // @namespace    http://tampermonkey.net/
-// @version      5.2.1
+// @version      6.1.3
 // @description  bilibili- ( ゜- ゜)つロ 乾杯~
 // @author       LJea
 // @homepage     http://www.lioat.cn/
@@ -4258,6 +4258,7 @@ var stopbutton = false;
 var infoflushd = true;
 var snewanime = bangumiModule.seasonId;
 var snewep = bangumiModule.newestEp;
+console.log("已获取当前番剧数据AnimeID:"+snewanime+",最新EP:"+snewep);
 var allcookies = document.cookie;
 function getCookie(cookie_name) {
     var allcookies = document.cookie;
@@ -4266,7 +4267,7 @@ function getCookie(cookie_name) {
     // 反之，就说明不存在。
     if (cookie_pos != -1) {
         // 把cookie_pos放在值的开始，只要给值加1即可。
-        cookie_pos += cookie_name.length + 1; //这里容易出问题，所以请大家参考的时候自己好好研究一下
+        cookie_pos += cookie_name.length + 1;
         var cookie_end = allcookies.indexOf(";", cookie_pos);
 
         if (cookie_end == -1) {
@@ -4278,10 +4279,10 @@ function getCookie(cookie_name) {
     return value;
 }
 var acsrf = getCookie("bili_jct");
-console.log("已获取CSRF(请求令牌):", acsrf); (function() {
+console.log("已获取CSRF(请求令牌):", acsrf);(function() {
     'use strict';
     console.log("bilibili- ( ゜- ゜)つロ 乾杯~");
-    GM_addStyle('.modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:888;background-color:rgba(50,50,50,0.5);}' + '.button{position:relative;font-size:17px;background:#d95280;border-radius: 3px;border-bottom: 3px solid #B5002A;padding:7px 15px;color:#fff;cursor:pointer;float:right;margin:50px 70px;-webkit-transition:margin 100ms;-moz-transition:margin 100ms;transition:margin 100ms ;}' + '.button:active{margin: 53px 70px;}' + '.button:hover{background:#ec7ba0;}' + 'button{float: right;padding: 8px 12px;margin-top: 15px;background: #dc5481;border: none;color: #fff;border-bottom: 3px solid #c54d74;border-radius: 3px;cursor: pointer;}' + 'button:active{margin: 18px 10px;}' + 'button:hover{background-color: #d47091;border-color: #d47091;}' + '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}' + '#forgot-link:hover{color: #23AA84;}' + '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}' + '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}' + '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}' + '#close:hover{color: #000;}');
+    GM_addStyle('.modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:888;background-color:rgba(50,50,50,0.5);}' + '.button{position:relative;font-size:17px;background:#f25d8e;border-radius: 3px;border-bottom: 3px solid #B5002A;padding:7px 15px;color:#fff;cursor:pointer;float:right;margin:50px 70px;-webkit-transition:margin 100ms;-moz-transition:margin 100ms;transition:margin 100ms ;}' + '.button:active{margin: 53px 70px;}' + '.button:hover{background:#ec7ba0;}' + 'button{float: right;padding: 8px 12px;margin-top: 15px;background: #dc5481;border: none;color: #fff;border-bottom: 3px solid #c54d74;border-radius: 3px;cursor: pointer;}' + 'button:active{margin: 18px 10px;}' + 'button:hover{background-color: #d47091;border-color: #d47091;}' + '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}' + '#forgot-link:hover{color: #23AA84;}' + '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}' + '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}' + '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}' + '#close:hover{color: #000;}');
     var bidiv = document.getElementsByClassName("info-btm");
     var div = document.createElement("div");
     div.id = "b-page-body";
@@ -4363,12 +4364,17 @@ function setmsg(anime, myep, mymessage) {
                 withCredentials: true
             }
         }).done(function(data) {
-            console.log('发送消息成功');
-            updateText('发送消息成功');
+            if (data.data && data.code === 0){
+                console.log('发送消息成功');
+                updateText('发送消息成功');}
+            else{
+                console.log("发送消息失败:",data.message);
+                updateText("发送消息失败:",data.message);
+            }
 
         }).fail(function() {
-            console.log("发送消息失败");
-            updateText("发送消息失败");
+            console.log("发送消息失败:网络异常");
+            updateText("发送消息失败:网络异常");
         });
     }
     $.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id=" + anime,
