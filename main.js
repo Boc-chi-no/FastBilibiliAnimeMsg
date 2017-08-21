@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Setbilibilimsg
 // @namespace    http://tampermonkey.net/
-// @version      6.1.3
+// @version      7.0.4
 // @description  bilibili- ( ゜- ゜)つロ 乾杯~
 // @author       LJea
 // @homepage     http://www.lioat.cn/
@@ -4250,14 +4250,18 @@
 //////////////////////////////////////////////////////////
 //														//
 // 以上是jQuery插件下载地址http://zaole.net/sliding.js	//
-//														//
+//													    //
 //////////////////////////////////////////////////////////
 
+var epname;
+var eptype;
 var bilibilisendstop = true;
 var stopbutton = false;
 var infoflushd = true;
+var andzero = false
 var snewanime = bangumiModule.seasonId;
 var snewep = bangumiModule.newestEp;
+
 console.log("已获取当前番剧数据AnimeID:"+snewanime+",最新EP:"+snewep);
 var allcookies = document.cookie;
 function getCookie(cookie_name) {
@@ -4267,7 +4271,7 @@ function getCookie(cookie_name) {
     // 反之，就说明不存在。
     if (cookie_pos != -1) {
         // 把cookie_pos放在值的开始，只要给值加1即可。
-        cookie_pos += cookie_name.length + 1;
+        cookie_pos += cookie_name.length + 1; //这里容易出问题，所以请大家参考的时候自己好好研究一下
         var cookie_end = allcookies.indexOf(";", cookie_pos);
 
         if (cookie_end == -1) {
@@ -4281,17 +4285,20 @@ function getCookie(cookie_name) {
 var acsrf = getCookie("bili_jct");
 console.log("已获取CSRF(请求令牌):", acsrf);(function() {
     'use strict';
-    console.log("bilibili- ( ゜- ゜)つロ 乾杯~");
-    GM_addStyle('.modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:888;background-color:rgba(50,50,50,0.5);}' + '.button{position:relative;font-size:17px;background:#f25d8e;border-radius: 3px;border-bottom: 3px solid #B5002A;padding:7px 15px;color:#fff;cursor:pointer;float:right;margin:50px 70px;-webkit-transition:margin 100ms;-moz-transition:margin 100ms;transition:margin 100ms ;}' + '.button:active{margin: 53px 70px;}' + '.button:hover{background:#ec7ba0;}' + 'button{float: right;padding: 8px 12px;margin-top: 15px;background: #dc5481;border: none;color: #fff;border-bottom: 3px solid #c54d74;border-radius: 3px;cursor: pointer;}' + 'button:active{margin: 18px 10px;}' + 'button:hover{background-color: #d47091;border-color: #d47091;}' + '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}' + '#forgot-link:hover{color: #23AA84;}' + '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}' + '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}' + '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}' + '#close:hover{color: #000;}');
+    console.log("bilibili- ( ゜- ゜)つロ 乾杯~");/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    GM_addStyle('.modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:888;background-color:rgba(50,50,50,0.5);}' + '.button{position:relative;font-size:17px;background:#f25d8e;border-radius: 3px;border-bottom: 3px solid #B5002A;padding:7px 15px;color:#fff;cursor:pointer;float:right;margin:50px 70px;-webkit-transition:margin 100ms;-moz-transition:margin 100ms;transition:margin 100ms ;}' + '.button:active{margin: 53px 70px;}' + '.button:hover{background:#ec7ba0;}' + 'button{float: right;padding: 8px 12px;margin-top: 15px;background: #dc5481;border: none;color: #fff;border-bottom: 3px solid #c54d74;border-radius: 3px;cursor: pointer;}' + 'button:active{margin: 18px 10px;}' + 'button:hover{background-color: #d47091;border-color: #d47091;}' + '#forgot-link{font-size: 14px;line-height: 45px;color: #dc5481;display: inline-block;}' + '#forgot-link:hover{color: #23AA84;}' + '#modal{ position:absolute;background-color: rgba(245, 245, 246, 0.75);;top:50%; left:50%;z-index:889;border-radius:3px;width:340px;height:260px;margin-top:-130px;margin-left:-170px;border-bottom: 3px solid #dc5481;box-shadow:0 0 10px 0 rgba(0,0,0,0.3);}' + '#modal span{display: block;background:#dc5481;padding: 10px;color:#fff;border-radius:3px;}' + '#close{float: right;color: #fff;font-family: serif;font-size: 15px;}' + '#close:hover{color: #000;}' + '.chk_4 + label {background-color: #FFF;padding: 11px 9px;border-radius: 7px;display: inline-block;position: relative;margin-right: 30px;background: #F7836D;width: 58px;box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1), 0 0 10px rgba(245, 146, 146, 0.4);}' + '.chk_4 + label:before {content: \' \';position: absolute;background: #FFF;top: 0px;z-index: 99999;left: 0px;width: 24px;height: 23px;border-radius: 7px;box-shadow: 0 0 1px rgba(0,0,0,0.6);}' + '.chk_4 + label:after {content: \'正常\';position: absolute;left: 37px;font-size: 1.2em;color: white;font-weight: bold;left: 8px;top: 2px;border-radius: 100px;}' + '.chk_4:checked + label {background: #4cda60;box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1), 0 0 10px rgba(146, 196, 245, 0.4);}' + '.chk_4:checked + label:after {content: \'订阅\';left: 10px;}' + '.chk_4:checked + label:before {content: \' \';position: absolute;z-index: 99999;left: 52px;}' + '.chk_4 + label:after {left: 35px;}' + '#checkbox_d2 + label:after, #checkbox_d2 + label:before, #checkbox label {-webkit-transition: all 0.1s ease-in;transition: all 0.1s ease-in;}');
     var bidiv = document.getElementsByClassName("info-btm");
     var div = document.createElement("div");
     div.id = "b-page-body";
-    div.innerHTML = '<span style="font-size: 17px;border-radius: 20px;padding: 11px 15px;top: -35px;left: -135px;margin: 39px 105px;border-bottom: none;" class="button">快速发送评论</span><div class="modal-bg" style="display: none;">' + '<div id="modal" style="display: none;position: relative;">' + '<span>发送评论<a href="#close" id="close">×</a></span>' + '<form>' + '<input id="anime" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 12px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\')" onbeforepaste="clipboardData.setData(\'\'text\'\',clipboardData.getData(\'\'text\'\').replace(/[^\\d]/g,\'\'))" name="anime" type="text" placeholder="番剧ID" >' + '<input id="ep" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 150px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\') "onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\\d]/g,\'\'))" name="ep" type="text" placeholder="P数" >' + '<textarea id="msg" name="msg" type="text" placeholder="评论内容" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;top: 45px;left: 12px;width: 308px;height: 60px;"></textarea>' + '<textarea id="infotxt" readonly="readonly" style="background-color: rgba(190, 190, 190, 0.7);bottom: 7px;position: absolute;width: 308px;left: 12px;height: 100px;">~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯</textarea>' + '<input name="submit" id="msgbutton" type="button" value="发送" style="position: absolute;top: 117px;left: 288px;height: 24px;width: 38px;"></input>' + '</form>' + '</div>' + '</div>';
+    div.innerHTML = '<span style="font-size: 17px;border-radius: 20px;padding: 11px 15px;top: -35px;left: -135px;margin: 39px 105px;border-bottom: none;" class="button">快速发送评论</span><div class="modal-bg" style="display: none;">' + '<div id="modal" style="display: none;position: relative;">' + '<span>发送评论<input style="display: none;" type="checkbox" id="checkbox_d1" class="chk_4"><label for="checkbox_d1" style="margin: -6px;left: 180px;"></label><a href="#close" id="close">×</a></span>' + '<form>' + '<input id="anime" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 12px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\')" onbeforepaste="clipboardData.setData(\'\'text\'\',clipboardData.getData(\'\'text\'\').replace(/[^\\d]/g,\'\'))" name="anime" type="text" placeholder="番剧ID" >' + '<input id="ep" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;left: 150px;top: 117px;height: 20px;width: 130px;" onkeyup="value=value.replace(/[^\\d]/g,\'\') "onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\\d]/g,\'\'))" name="ep" type="text" placeholder="P数" >' + '<textarea id="msg" name="msg" type="text" placeholder="评论内容" style="background-color: rgba(238, 238, 238, 0.85);position: absolute;top: 45px;left: 12px;width: 308px;height: 60px;"></textarea>' + '<textarea id="infotxt" readonly="readonly" style="background-color: rgba(190, 190, 190, 0.7);bottom: 7px;position: absolute;width: 308px;left: 12px;height: 100px;">~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯~bilibili- ( ゜- ゜)つロ 乾杯</textarea>' + '<input name="submit" id="msgbutton" type="button" value="发送" style="position: absolute;top: 117px;left: 288px;height: 24px;width: 38px;"></input>' + '</form>' + '</div>' + '</div>';
     bidiv[0].appendChild(div);
+    eptype = $('#checkbox_d1')[0];
 
     $('.button').click(function() {
         document.getElementById("anime").value = snewanime;
         document.getElementById("ep").value = snewep;
+        epname = seasonTitle;
+        console.log("已获取番剧名:", epname);
         $('#modal').css('display', 'block');
         $('.modal-bg').fadeIn();
     });
@@ -4377,37 +4384,87 @@ function setmsg(anime, myep, mymessage) {
             updateText("发送消息失败:网络异常");
         });
     }
-    $.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id=" + anime,
-        function(newresult) {
-            //api服务器默认请求头带no-cache,如果发生特殊情况,在.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id="+anime后加上+"&_="+(new Date()).getTime()用时间戳刷掉缓存
-            var eps = newresult.result;
-            var i = eps.length - 1;
-            var c = myep - 1;
-            var ep = parseInt(eps[i].index);
-            console.log("当前最新EP:" + ep);
-            updateText("当前最新EP:" + ep);
-            /*
-             console.log(ep)
-             console.log(myep)
-             console.log(intmyep)
-             */
-            if (ep >= intmyep) {
-                var id = eps[c].avid;
-                console.log("已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
-                updateText("已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
-                document.getElementById("msgbutton").value = "发送";
-                console.log(newresult);
-                sendMessage(id, mymessage);
-            } else if (bilibilisendstop === false) {
-                setTimeout(setmsg, 1, anime, myep, mymessage);
-                console.log("你要的是 EP:" + myep + ",尚未找到额...");
-                updateText("你要的是 EP:" + myep + ",尚未找到额...");
-            } else if (infoflushd === true) {
-                updateText("");
-            } else {
-                updateText("已停止发送...");
-                updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
-                console.log("脚本已关闭...");
+    if (eptype.checked == true){
+        //(.*)(?=.*'+name+')(?=.*08)+(.*)
+        var epnametest;
+        var epmyeptest
+        var epauthtest
+        var thisavid;
+        var newresultindex;
+        $.support.cors = true;
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            xhrFields: { withCredentials: true },
+            url: "https://api.bilibili.com/x/feed/pull?jsonp=jsonp&ps=0&type=0",
+            success:  function(newresult) {
+                if (intmyep < 10 && andzero != true) {myep =  myep = "0" + myep; andzero = true;}//补零
+                epnametest = new RegExp("(.*)(?=.*"+epname+")(?=.*"+myep+")+(.*)");
+                epmyeptest = new RegExp("(.*)(?=.*"+myep+")+(.*)")
+                epauthtest = new RegExp("(.*)(?=.*哔哩哔哩番剧)+(.*)");
+                for (var i=0;i<newresult.data.feeds.length;i++){
+                    if (epnametest.test(newresult.data.feeds[i].addition.title) && epauthtest.test(newresult.data.feeds[i].addition.author)){
+                        thisavid = newresult.data.feeds[i].addition.aid;
+                        newresultindex = i;}}
+                if (newresultindex != null && epnametest.test(newresult.data.feeds[newresultindex].addition.title) && epmyeptest.test(newresult.data.feeds[newresultindex].addition.description)){
+                    console.log("已找到输入的EP:" + myep + ",AV:" + thisavid + "\n正在准备发送...");
+                    updateText("已找到输入的EP:" + myep + ",AV:" + thisavid + "\n正在准备发送...");
+                    document.getElementById("msgbutton").value = "发送";
+                    console.log(newresult);
+                    //sendMessage(thisavid, mymessage);
+                }
+                else if (bilibilisendstop === false) {
+                    setTimeout(setmsg, 1, anime, myep, mymessage);
+                    console.log("你要的是 EP:" + myep + ",尚未找到额...");
+                    updateText("你要的是 EP:" + myep + ",尚未找到额...");
+                } else if (infoflushd === true) {
+                    updateText("");
+                } else {
+                    updateText("已停止发送...");
+                    updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
+                    console.log("脚本已关闭...");
+                }
             }
         });
+    }
+    else if(eptype.checked == false){
+        $.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id=" + anime,
+            function(newresult) {
+                //api服务器默认请求头带no-cache,如果发生特殊情况,在.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id="+anime后加上+"&_="+(new Date()).getTime()用时间戳刷掉缓存
+                var eps = newresult.result;
+                var i = eps.length - 1;
+                var c = myep - 1;
+                var ep = parseInt(eps[i].index);
+                console.log("当前最新EP:" + ep);
+                updateText("当前最新EP:" + ep);
+                /*
+                 console.log(ep)
+                 console.log(myep)
+                 console.log(intmyep)
+                 */
+                if (ep >= intmyep) {
+                    var id = eps[c].avid;
+                    console.log("已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
+                    updateText("已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
+                    document.getElementById("msgbutton").value = "发送";
+                    console.log(newresult);
+                    //sendMessage(id, mymessage);
+                }
+                else if (bilibilisendstop === false) {
+                    setTimeout(setmsg, 1, anime, myep, mymessage);
+                    console.log("你要的是 EP:" + myep + ",尚未找到额...");
+                    updateText("你要的是 EP:" + myep + ",尚未找到额...");
+                } else if (infoflushd === true) {
+                    updateText("");
+                } else {
+                    updateText("已停止发送...");
+                    updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
+                    console.log("脚本已关闭...");
+                }
+            });
+    }
+    else {
+        updateText("按钮状态异常");
+        console.log("按钮状态异常");
+    }
 }
