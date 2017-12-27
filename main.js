@@ -4394,38 +4394,50 @@ function setmsg(anime, myep, mymessage) {
         $.support.cors = true;
         $.ajax({
             type: "get",
-            dataType: "json",
+            dataType: "text",
             xhrFields: { withCredentials: true },
-            url: "https://api.bilibili.com/x/feed/pull?jsonp=jsonp&ps=0&type=0",
-            success:  function(newresult) {
-                if (intmyep < 10 && andzero != true) {myep =  myep = "0" + myep; andzero = true;}//补零
-                epnametest = new RegExp("(.*)(?=.*"+epname+")(?=.*"+myep+")+(.*)");
-                epmyeptest = new RegExp("(.*)(?=.*"+myep+")+(.*)")
-                epauthtest = new RegExp("(.*)(?=.*哔哩哔哩番剧)+(.*)");
-                for (var i=0;i<newresult.data.feeds.length;i++){
-                    if (epnametest.test(newresult.data.feeds[i].addition.title) && epauthtest.test(newresult.data.feeds[i].addition.author)){
-                        thisavid = newresult.data.feeds[i].addition.aid;
-                        newresultindex = i;}}
-                if (newresultindex != null && epnametest.test(newresult.data.feeds[newresultindex].addition.title) && epmyeptest.test(newresult.data.feeds[newresultindex].addition.description)){
-                    console.log("已找到输入的EP:" + myep + ",AV:" + thisavid + "\n正在准备发送...");
-                    updateText("已找到输入的EP:" + myep + ",AV:" + thisavid + "\n正在准备发送...");
-                    document.getElementById("msgbutton").value = "发送";
-                    console.log(newresult);
-                    //sendMessage(thisavid, mymessage);
-                }
-                else if (bilibilisendstop === false) {
-                    setTimeout(setmsg, 1, anime, myep, mymessage);
-                    console.log("你要的是 EP:" + myep + ",尚未找到额...");
-                    updateText("你要的是 EP:" + myep + ",尚未找到额...");
-                } else if (infoflushd === true) {
-                    updateText("");
-                } else {
-                    updateText("已停止发送...");
-                    updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
-                    console.log("脚本已关闭...");
-                }
+            url: "https://bangumi.bilibili.com/jsonp/seasoninfo/" + anime + ".ver?callback=seasonListCallback&jsonp=jsonp&_="+(new Date()).getTime(),
+            success:  function(newstrresult) {
+				newstrresult = newstrresult.substring(19,newstrresult.length-2)
+				var newresult = eval('(' + newstrresult + ')');
+				var eps = newresult.result.episodes;
+				var i = eps.length - 1;
+				var c = myep - 1;
+				if (eps.length != 0){
+					var ep = parseInt(eps.length);
+					console.log("当前最新EP:" + ep);
+					//updateText("当前最新EP:" + ep);
+				}else{
+					var ep = -1
+					//updateText("当前还没有EP");
+					console.log("未找到EP!");}
+				if (ep >= intmyep) {
+					var id = eps[c].av_id;
+					console.log("核心C: 已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
+					updateText("核心C: 已找到输入的EP:" + myep + ",AV:" + id + "\n正在准备发送...");
+					document.getElementById("msgbutton").value = "发送";
+					console.log(newresult);
+					sendMessage(id, mymessage);
+				}
+				else if (bilibilisendstop === false) {
+					setTimeout(setmsg, 1, anime, myep, mymessage);
+					console.log("核心C: 你要的是 EP:" + myep + ",尚未找到额...");
+					updateText("核心C: 你要的是 EP:" + myep + ",尚未找到额...");
+				} else if (infoflushd === true) {
+					updateText("");
+				} else {
+					updateText("核心C: 已停止发送...");
+					updateText("bilibili- ( ゜- ゜)つロ 乾杯~");
+					console.log("脚本已关闭...");
+				}
+				
+				if (eps.length != 0){
+					updateText("当前最新EP:" + ep);
+				}else{
+					updateText("当前还没有EP");}
+
             }
-        });
+        });		
     }
     else if(eptype.checked == false){
         $.getJSON("https://bangumi.bilibili.com/web_api/get_ep_list?season_id=" + anime,
